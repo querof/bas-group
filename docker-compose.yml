@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "8081:81"
+    volumes:
+      - ./app:/var/app
+
+  fpm:
+    build:
+      context: ./fpm
+    volumes:
+      - ./app:/var/app
+    expose:
+      - "9000"
+    environment:
+      - "DB_HOST=db"
+      - "DB_DATABASE=bas"
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bas
+    volumes:
+      - ./database:/var/lib/mysql
