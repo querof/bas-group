@@ -3,10 +3,12 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y software-properties-common language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
-    && apt-get install -y php8.1 php8.1-fpm php8.1-mysql php8.1-xml mcrypt php8.1-gd curl \
-       php8.1-curl php-redis php8.1-mbstring sendmail supervisor \
+    && apt-get install -y php8.1 php8.1-fpm php8.1-mysql php8.1-xml mcrypt php8.1-gd curl php8.1-curl \
+       php8.1-curl  php8.1-mbstring sendmail supervisor zip unzip php-xml \
     && mkdir -p /run/php \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
