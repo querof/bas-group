@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Recipient;
 use App\Repository\RecipientRepository;
+use App\Service\EncryptionService;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
@@ -18,11 +19,13 @@ class RecipientController
 {
     private EntityManagerInterface $entityManager;
     private RecipientRepository $recipientRepository;
+    private EncryptionService $encryptionService;
 
-    public function __construct(EntityManagerInterface $entityManager, RecipientRepository $recipientRepository)
+    public function __construct(EntityManagerInterface $entityManager, RecipientRepository $recipientRepository,  EncryptionService $encryptionService)
     {
         $this->entityManager = $entityManager;
         $this->recipientRepository = $recipientRepository;
+        $this->encryptionService = $encryptionService;
     }
 
     #[Route('/recipient', name: 'recipient', methods: ['POST'])]
@@ -37,14 +40,15 @@ class RecipientController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            $recipient = new Recipient($identifier);
+            $encryptionKey = $this->encryptionService->generateKey();
+            $recipient = new Recipient($identifier, $encryptionKey);
             $this->entityManager->persist($recipient);
 
             $this->entityManager->flush();
 
             return new  JsonResponse([
                 'id' => $recipient->getId(),
-                'identifier' => $recipient->getIdentifier()
+                'identifier' => $recipient->getIdentifier(),
             ], Response::HTTP_CREATED);
         } catch (ORMException | UniqueConstraintViolationException $exception) {
             if($exception instanceof UniqueConstraintViolationException) {
@@ -59,11 +63,10 @@ class RecipientController
         }
     }
 
-    #[Route('/recipient/{id}', name: 'get_recipient', methods: ['GET'])]
-    public function get(int $id): JsonResponse
+    #[Route('/recipient/{recipient}', name: 'get_recipient', methods: ['GET'])]
+    public function get(?Recipient $recipient): JsonResponse
     {
-        $recipient = $this->recipientRepository->find($id);
-        if ($recipient === null) {
+        if (!$recipient ) {
             return new JsonResponse([
                 'error' => 'Recipient not found'
             ], Response::HTTP_NOT_FOUND);
