@@ -8,9 +8,8 @@ class EncryptionService
 {
     private string $method = 'AES-256-CBC';
 
-    public function encrypt(string $data, string &$key): string
+    public function encrypt(string $data, string $key): string
     {
-        $key = openssl_random_pseudo_bytes(32);
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->method));
         $encrypted = openssl_encrypt($data, $this->method, $key, 0, $iv);
 
@@ -21,5 +20,10 @@ class EncryptionService
     {
         list($iv, $encrypted) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted, $this->method, $key, 0, $iv);
+    }
+
+    public function getKey(): string
+    {
+        return openssl_random_pseudo_bytes(32);
     }
 }
