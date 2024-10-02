@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
@@ -14,14 +15,21 @@ class Message
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $text = null;
+    private string $text ;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createAt = null;
+    private DateTimeImmutable $createAt;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Recipient $Recipient = null;
+    private Recipient $Recipient ;
+
+    public function __construct(string $text,  Recipient $Recipient)
+    {
+        $this->text = $text;
+        $this->createAt = new DateTimeImmutable();
+        $this->Recipient = $Recipient;
+    }
 
     public function getId(): ?int
     {
@@ -33,34 +41,13 @@ class Message
         return $this->text;
     }
 
-    public function setText(string $text): static
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreateAt(): ?DateTimeImmutable
     {
         return $this->createAt;
-    }
-
-    public function setCreateAt(\DateTimeImmutable $createAt): static
-    {
-        $this->createAt = $createAt;
-
-        return $this;
     }
 
     public function getRecipient(): ?Recipient
     {
         return $this->Recipient;
-    }
-
-    public function setRecipient(?Recipient $Recipient): static
-    {
-        $this->Recipient = $Recipient;
-
-        return $this;
     }
 }

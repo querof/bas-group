@@ -15,14 +15,15 @@ class Recipient
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $identifier = null;
+    #[ORM\Column(length: 20, unique: true)]
+    private string $identifier ;
 
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'Recipient')]
     private Collection $messages;
 
-    public function __construct()
+    public function __construct(string $identifier)
     {
+        $this->identifier = $identifier;
         $this->messages = new ArrayCollection();
     }
 
@@ -36,40 +37,8 @@ class Recipient
         return $this->identifier;
     }
 
-    public function setIdentifier(string $identifier): static
-    {
-        $this->identifier = $identifier;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
     public function getMessages(): Collection
     {
         return $this->messages;
-    }
-
-    public function addMessage(Message $message): static
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setRecipient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): static
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getRecipient() === $this) {
-                $message->setRecipient(null);
-            }
-        }
-
-        return $this;
     }
 }
