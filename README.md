@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a Symfony-based application that handles messages for recipients. It includes endpoints to push messages, retrieve a specific message, and retrieve all messages for a recipient. The project also includes Docker support for containerized deployment.
+This project is an implementation of **Secret message**. It includes endpoints to push messages, retrieve a specific message, and retrieve all messages for a recipient. The project also includes Docker support for containerized deployment.
 
 ## Requirements
 
@@ -101,7 +101,7 @@ This project is a Symfony-based application that handles messages for recipients
 To run the tests, use the following command:
 
 ```sh
-./vendor/bin/phpunit
+make tests
 ```
 
 ## License
