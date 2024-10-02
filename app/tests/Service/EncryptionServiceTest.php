@@ -12,7 +12,7 @@ class EncryptionServiceTest extends TestCase
     public function testEncrypt(): void
     {
         $encryptionService = new EncryptionService();
-        $key = $encryptionService->getKey();
+        $key = $encryptionService->generateKey();
         $data = 'This is a test string';
         $encrypted = $encryptionService->encrypt($data, $key);
         static::assertNotEquals($data, $encrypted);
@@ -21,7 +21,7 @@ class EncryptionServiceTest extends TestCase
     public function testDecrypt(): void
     {
         $encryptionService = new EncryptionService();
-        $key = $encryptionService->getKey();
+        $key = $encryptionService->generateKey();
         $data = 'This is a test string';
         $encrypted = $encryptionService->encrypt($data, $key);
         $decrypted = $encryptionService->decrypt($encrypted, $key);

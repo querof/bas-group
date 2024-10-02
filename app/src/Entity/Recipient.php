@@ -21,10 +21,14 @@ class Recipient
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'Recipient')]
     private Collection $messages;
 
-    public function __construct(string $identifier)
+    #[ORM\Column(length: 45)]
+    private string $encryptionKey;
+
+    public function __construct(string $identifier, string $encryptionKey)
     {
         $this->identifier = $identifier;
         $this->messages = new ArrayCollection();
+        $this->encryptionKey = $encryptionKey;
     }
 
     public function getId(): ?int
@@ -40,5 +44,10 @@ class Recipient
     public function getMessages(): Collection
     {
         return $this->messages;
+    }
+
+    public function getEncryptionKey(): string
+    {
+        return $this->encryptionKey;
     }
 }

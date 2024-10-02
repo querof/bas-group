@@ -22,8 +22,8 @@ class EncryptionService
         return openssl_decrypt($encrypted, $this->method, $key, 0, $iv);
     }
 
-    public function getKey(): string
+    public function generateKey(): string
     {
-        return openssl_random_pseudo_bytes(32);
+        return base64_encode(openssl_random_pseudo_bytes(32));
     }
 }
