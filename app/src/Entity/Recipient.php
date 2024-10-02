@@ -15,15 +15,16 @@ class Recipient
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 20, unique: true)]
     private string $identifier ;
 
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'Recipient')]
-    private ?Collection $messages;
+    private Collection $messages;
 
     public function __construct(string $identifier)
     {
         $this->identifier = $identifier;
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -36,7 +37,7 @@ class Recipient
         return $this->identifier;
     }
 
-    public function getMessages(): ?Collection
+    public function getMessages(): Collection
     {
         return $this->messages;
     }
