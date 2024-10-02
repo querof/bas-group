@@ -12,3 +12,6 @@ restart_containers:
 install:
 	docker exec -it bas-group-fpm-1 composer install  --optimize-autoloader
 	docker exec -it bas-group-fpm-1 php bin/console doctrine:migrations:migrate --no-interaction
+
+tests:
+	docker exec -it bas-group-fpm-1  php ./vendor/bin/phpunit
