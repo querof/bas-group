@@ -8,10 +8,13 @@ use App\Entity\Message;
 use App\Entity\Recipient;
 use App\Repository\RecipientRepository;
 use App\Service\EncryptionService;
+use DateMalformedStringException;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,16 +26,19 @@ class MessageController
     private EntityManager $entityManager;
     private EncryptionService $encryptionService;
     private RecipientRepository $recipientRepository;
+    private int $expirationDays;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         EncryptionService $encryptionService,
-        RecipientRepository $recipientRepository
+        RecipientRepository $recipientRepository,
+        int $expirationDays
     )
     {
         $this->entityManager = $entityManager;
         $this->encryptionService = $encryptionService;
         $this->recipientRepository = $recipientRepository;
+        $this->expirationDays = $expirationDays;
     }
 
     #[Route('/message', name: 'message', methods: ['POST'])]
@@ -55,8 +61,7 @@ class MessageController
             $encryptionKey = $recipient->getEncryptionKey();
 
             $encryptedMessage = $this->encryptionService->encrypt($messageText, $encryptionKey);
-
-            $message = new Message($encryptedMessage, $recipient);
+            $message = new Message($encryptedMessage, $recipient, $this->expirationDays);
             $this->entityManager->persist($message);
 
             $this->entityManager->flush();
