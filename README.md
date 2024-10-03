@@ -16,7 +16,7 @@ This project is an implementation of **Secret message**. It includes endpoints t
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/your-repo/bas-group.git
+   git clone https://github.com/querof/bas-group.git
    cd bas-group
    ```
 
