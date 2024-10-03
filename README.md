@@ -60,6 +60,8 @@ This project is an implementation of **Secret message**. It includes endpoints t
 
 ## Endpoints
 
+### Base URL: http://localhost:8081
+
 ### Push a Message
 
 - **URL:** `/message`
@@ -102,9 +104,4 @@ To run the tests, use the following command:
 
 ```sh
 make tests
-```
-
-## License
-
-This project is licensed under the MIT License.
 ```

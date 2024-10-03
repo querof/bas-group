@@ -3,3 +3,6 @@
 /database/*
 !/database/
 /app/vendor/
+app/phpunit.xml.bak
+app/.phpunit.cache/test-results
+app/logs/junit.xml
