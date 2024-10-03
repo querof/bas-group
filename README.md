@@ -32,6 +32,20 @@ This project is an implementation of **Secret message**. It includes endpoints t
    make install
    ```
 
+4. **Remove expired messages:**
+
+   ```sh
+   make install
+   ```
+
+5. **Setup expiration var in .env:**
+
+The default value is 30 days, but you can change it in the .env file.
+   ```
+MESSAGE_EXPIRATION_DAYS=30
+   ```
+   
+
 ## Makefile Commands
 
 - **Start containers:**
