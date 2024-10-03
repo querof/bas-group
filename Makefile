@@ -13,5 +13,8 @@ install:
 	docker exec -it bas-group-fpm-1 composer install  --optimize-autoloader
 	docker exec -it bas-group-fpm-1 php bin/console doctrine:migrations:migrate --no-interaction
 
+remove_expired_messages:
+	docker exec -it bas-group-fpm-1 php bin/console app:delete-expired-messages
+
 tests:
 	docker exec -it bas-group-fpm-1  php ./vendor/bin/phpunit
